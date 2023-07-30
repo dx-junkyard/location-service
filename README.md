@@ -1,9 +1,9 @@
-# sports-barrier-free
+# location-service
 
 ## 事前準備 docker-compose.ymlと設定ファイルを取得
 ```
-git clone https://github.com/dx-junkyard/sports-barrier-free.git
-cd sports-barrier-free/
+git clone https://github.com/dx-junkyard/location-service.git
+cd location-service/
 ```
 
 ## 環境構築（１）soruce codeの取得とコンテナ起動
