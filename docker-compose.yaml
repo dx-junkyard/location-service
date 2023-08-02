@@ -1,0 +1,53 @@
+version: '3'
+
+services:
+  nginx-proxy:
+    image: nginx:latest
+    restart: always
+    volumes:
+      - "$PWD/nginx.config/:/etc/nginx/conf.d/"
+      - "$PWD/certs/cert.pem:/path/to/fullchain.pem"
+      - "$PWD/certs/key.pem:/path/to/privkey.pem"
+    ports:
+      - "443:443"
+
+
+  # MySQL
+  db:
+    platform: linux/x86_64
+    image: mysql:latest
+    restart: always
+    container_name: location-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: mylocationdb
+      MYSQL_USER: location
+      MYSQL_PASSWORD: location
+      TZ: 'Asia/Tokyo'
+      VIRTUAL_HOST: db
+      VIRTUAL_PORT: 3306
+    command: --default-authentication-plugin=caching_sha2_password
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 3s
+      timeout: 30s
+      retries: 10
+    volumes:
+    - ./db-location-mysql/mysql/data:/var/lib/mysql
+    - ./db-location-mysql/mysql/my.cnf:/etc/mysql/conf.d/my.cnf
+    - ./db-location-mysql/mysql/db:/docker-entrypoint-initdb.d
+
+
+  api-location-app:
+    image: api-location-spring
+    restart: always
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/mylocationdb
+      SPRING_DATASOURCE_USERNAME: location
+      SPRING_DATASOURCE_PASSWORD: location
+    ports:
+      - "8080:8080"
+
