@@ -27,7 +27,12 @@ curl -k -XPOST -H "Content-Type: application/json"  https://localhost/location/v
 ```
 
 ### 指定の緯度経度から半径1000m以内の登録idのリストを取得
-``
+```
 curl -k -XGET "https://localhost/location/v1/api/location?latitude=35.71124100000004&longitude=139.794231&rangem=1000"
-``
+```
 
+## API仕様
+ブラウザで以下を確認
+```
+https://localhost/swagger-ui.html#/controller
+```
