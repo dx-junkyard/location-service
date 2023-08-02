@@ -1,0 +1,12 @@
+# ベースイメージとしてAlpine Linuxを選択 (opensslがプリインストールされている)
+FROM alpine:latest
+
+# 必要なツールをインストール
+RUN apk add --no-cache openssl
+
+# SSL証明書と秘密鍵を作成するための作業ディレクトリを作成
+WORKDIR /certs
+
+# エントリーポイントを設定 (証明書と秘密鍵を生成)
+ENTRYPOINT openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365 -nodes -subj "/C=JP/ST=Tokyo/L=Tokyo/O=Example Corp./OU=IT/CN=localhost"
+

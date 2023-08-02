@@ -1,26 +1,20 @@
 # location-service
 
-## 事前準備 docker-compose.ymlと設定ファイルを取得
+## 事前準備 location-serviceのスクリプトを取得
 ```
 git clone https://github.com/dx-junkyard/location-service.git
 cd location-service/
 ```
 
-## 環境構築（１）soruce codeの取得とコンテナ起動
-setup.shか以下どちらかを実行する
+## 環境構築
+###（１）Dockerイメージ作成
 ```
-git clone https://github.com/dx-junkyard/api-location-spring.git
-git clone https://github.com/dx-junkyard/api-location-mysql.git
-cp ./config/api-location-spring/application.properties api-location-spring/src/main/resources/
-docker-compose up -d
-docker-compose exec app bash
+sh build.sh
 ```
 
-## 環境構築（２）コンテナ内でのbuild
+###（２）コンテナ起動
 ```
-./gradlew build -x test
-TARGET=api-location-spring
-java -jar ./build/libs/${TARGET}-0.0.1-SNAPSHOT.jar &
+docker-compose up -d
 ```
 
 ## 動作確認
@@ -29,11 +23,11 @@ java -jar ./build/libs/${TARGET}-0.0.1-SNAPSHOT.jar &
 
 ### 緯度経度の登録
 ```
-curl -XPOST -H "Content-Type: application/json"  http://localhost:8080/v1/api/location -d'{"id":1,"latitude":"35.71124100000004","longitude":"139.794231"}'
+curl -k -XPOST -H "Content-Type: application/json"  https://localhost/location/v1/api/location -d'{"id":1,"latitude":"35.71124100000004","longitude":"139.794231"}'
 ```
 
 ### 指定の緯度経度から半径1000m以内の登録idのリストを取得
 ``
-curl -XGET "http://localhost:8080/v1/api/location?latitude=35.71124100000004&longitude=139.794231&rangem=1000"
+curl -k -XGET "https://localhost/location/v1/api/location?latitude=35.71124100000004&longitude=139.794231&rangem=1000"
 ``
 
