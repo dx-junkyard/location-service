@@ -1,0 +1,27 @@
+FROM openjdk:11
+
+RUN mkdir /output
+
+# Install Git and Gradle
+RUN apt-get update && apt-get install -y git
+
+ENV GRADLE_VERSION 7.4
+
+WORKDIR /app
+
+RUN wget https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip \
+    && unzip -d /opt gradle-${GRADLE_VERSION}-bin.zip \
+    && rm gradle-${GRADLE_VERSION}-bin.zip
+
+ENV PATH="${PATH}:/opt/gradle-${GRADLE_VERSION}/bin"
+
+# Clone the project and build it with Gradle
+RUN git clone https://github.com/dx-junkyard/api-location-spring.git && cd /app/api-location-spring && gradle build
+
+
+# Build it with Gradle
+CMD cp /app/api-location-spring/build/libs/api-location-spring-0.0.1-SNAPSHOT.jar /output
+
+
+EXPOSE 8080
+
