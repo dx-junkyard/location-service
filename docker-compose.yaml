@@ -6,10 +6,8 @@ services:
     restart: always
     volumes:
       - "$PWD/nginx.config/:/etc/nginx/conf.d/"
-      - "$PWD/certs/cert.pem:/path/to/fullchain.pem"
-      - "$PWD/certs/key.pem:/path/to/privkey.pem"
     ports:
-      - "443:443"
+      - "80:80"
 
 
   # MySQL

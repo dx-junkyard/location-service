@@ -50,15 +50,3 @@ echo "---------- ${TARGET} ----------"
 docker build --no-cache -t ${TARGET} -f Dockerfile-run.${TARGET} .
 done
 
-#
-# step 6. テスト用に自己署名のSSL証明書を生成
-#    本番環境では以下全てをコメントアウトし、
-#    build.shを実行後作成される./certs下にそれぞれ以下のファイル名で証明書と秘密鍵を置く
-#       証明書：cert.pem
-#       秘密鍵：key.pem
-#
-clean_up certs
-mkdir ./certs
-docker build --no-cache -t localhost-ssl -f Dockerfile-localhost-ssl  .
-docker run --rm -v $(pwd)/certs:/certs localhost-ssl
-
